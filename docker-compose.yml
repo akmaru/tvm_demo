@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  dev:
+    build:
+      context: docker
+      dockerfile: Dockerfile
+    container_name: dev
+    stdin_open: true
+    tty: true
+    user: root
+    network_mode: "host"
+    volumes:
+      - ${PWD}:/workspaces/tvm_demo
+      - ${DATASET_DIR}:/datasets
+    working_dir: /workspaces/tvm_demo
+    environment:
+      - HOST_UID=${HOST_UID}
+      - HOST_GID=${HOST_GID}
+    command: /workspaces/tvm_demo/docker/_docker_init.sh
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [ gpu ]
+
